@@ -3,6 +3,6 @@
 from app.models.artifact import Artifact
 from app.models.auction import Auction, AuctionStatus
 from app.models.bid import Bid
-from app.models.user import User
+from app.models.user import User, UserRole
 
-__all__ = ["Artifact", "Auction", "AuctionStatus", "Bid", "User"]
+__all__ = ["Artifact", "Auction", "AuctionStatus", "Bid", "User", "UserRole"]
