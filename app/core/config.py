@@ -29,6 +29,14 @@ class Settings(BaseSettings):
     # Optional full URL override (e.g. for tests or managed databases)
     db_url: str | None = None
 
+    # Security. CHANGE secret_key in .env for anything except local dev!
+    # Generate: python -c "import secrets; print(secrets.token_urlsafe(48))"
+    secret_key: str = "dev-only-secret-key-change-me-in-env-file-0123456789"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
+    # bcrypt work factor: 12 is a sane default, tests use a lower value
+    bcrypt_rounds: int = 12
+
     @property
     def database_url(self) -> str:
         if self.db_url:
