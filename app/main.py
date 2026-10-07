@@ -1,13 +1,17 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import admin, artifacts, auctions, auth, health, home, users, ws
 from app.core.config import settings
 from app.db.session import engine
 from app.services.errors import DomainError
+
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 
 @asynccontextmanager
@@ -39,6 +43,14 @@ def create_app() -> FastAPI:
         ws.router,
     ):
         application.include_router(router)
+
+    # Frontend: single-page UI served by the same process (no CORS needed).
+    application.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @application.get("/", include_in_schema=False)
+    async def index() -> FileResponse:
+        return FileResponse(STATIC_DIR / "index.html")
+
     return application
 
 

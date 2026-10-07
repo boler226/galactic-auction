@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galactic Auction</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🪐</text></svg>" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <!-- ============ AUTH ============ -->
+  <section id="auth-screen" class="auth is-hidden">
+    <div class="auth-card">
+      <h1 class="brand brand-lg">Galactic Auction</h1>
+      <p class="auth-lead">Торги рідкісними артефактами з усіх галактик.</p>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab is-active" data-tab="login">Вхід</button>
+        <button type="button" class="auth-tab" data-tab="register">Реєстрація</button>
+      </div>
+
+      <form id="login-form" class="form" autocomplete="on">
+        <label>Ім'я користувача<input name="username" required autocomplete="username" /></label>
+        <label>Пароль<input name="password" type="password" required autocomplete="current-password" /></label>
+        <p class="form-error" data-error="login"></p>
+        <button class="btn btn-primary" type="submit">Увійти</button>
+      </form>
+
+      <form id="register-form" class="form is-hidden" autocomplete="on">
+        <label>Ім'я користувача<input name="username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" title="3–32 символи: літери, цифри, підкреслення" autocomplete="username" /></label>
+        <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+        <label>Пароль<input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
+        <p class="form-error" data-error="register"></p>
+        <button class="btn btn-primary" type="submit">Створити акаунт</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ APP ============ -->
+  <div id="app-screen" class="app is-hidden">
+    <aside class="sidebar">
+      <div class="brand">Galactic Auction</div>
+      <div class="me">
+        <div class="me-name" id="me-username">—</div>
+        <div class="me-role" id="me-role">—</div>
+        <div class="me-balance"><span id="me-balance">0,00</span> <small>cr</small></div>
+      </div>
+      <nav class="nav">
+        <button class="nav-item is-active" data-view="auctions">Аукціони</button>
+        <button class="nav-item" data-view="profile">Профіль</button>
+        <button class="nav-item is-hidden" id="nav-admin" data-view="admin">Адмін-панель</button>
+      </nav>
+      <button class="btn btn-ghost" id="logout-btn">Вийти</button>
+    </aside>
+
+    <main class="main">
+      <!-- auctions -->
+      <section class="view is-active" id="view-auctions">
+        <div class="view-head">
+          <h2>Аукціони</h2>
+          <button class="btn btn-ghost btn-sm" id="refresh-auctions">Оновити</button>
+        </div>
+        <div class="split">
+          <ul class="auction-list" id="auction-list"></ul>
+          <div class="panel auction-detail" id="auction-detail">
+            <p class="empty-hint">Оберіть лот зі списку, щоб побачити ставки.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- profile -->
+      <section class="view" id="view-profile">
+        <div class="view-head"><h2>Профіль</h2></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Поповнити баланс</h3>
+            <form class="form" id="deposit-form">
+              <label>Сума, cr<input name="amount" type="number" min="0.01" max="1000000" step="0.01" required /></label>
+              <p class="form-error" data-error="deposit"></p>
+              <button class="btn btn-primary" type="submit">Поповнити</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Мої ставки</h3>
+            <ul class="bid-history" id="my-bids"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- admin -->
+      <section class="view" id="view-admin">
+        <div class="view-head"><h2>Адмін-панель</h2></div>
+        <div class="stats" id="admin-stats"></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Новий артефакт</h3>
+            <form class="form" id="artifact-form">
+              <label>Назва<input name="name" required maxlength="255" /></label>
+              <label>Рідкісність
+                <select name="rarity">
+                  <option value="common">common</option>
+                  <option value="uncommon">uncommon</option>
+                  <option value="rare">rare</option>
+                  <option value="epic">epic</option>
+                  <option value="legendary">legendary</option>
+                </select>
+              </label>
+              <label>Галактика походження<input name="origin_galaxy" maxlength="128" /></label>
+              <label>Опис<textarea name="description" rows="3"></textarea></label>
+              <p class="form-error" data-error="artifact"></p>
+              <button class="btn btn-primary" type="submit">Створити артефакт</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Новий аукціон</h3>
+            <form class="form" id="new-auction-form">
+              <label>Артефакт<select name="artifact_id" id="artifact-select" required></select></label>
+              <label>Стартова ціна, cr<input name="starting_price" type="number" min="0.01" step="0.01" required /></label>
+              <label>Початок<input name="starts_at" type="datetime-local" required /></label>
+              <label>Завершення<input name="ends_at" type="datetime-local" required /></label>
+              <p class="form-error" data-error="new-auction"></p>
+              <button class="btn btn-primary" type="submit">Створити аукціон</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Користувачі</h3>
+          <div class="table-wrap">
+            <table id="users-table">
+              <thead><tr><th>Ім'я</th><th>Email</th><th>Роль</th><th>Статус</th><th>Баланс</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
