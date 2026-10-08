@@ -54,6 +54,10 @@ const Api = (() => {
     } catch {
       /* empty or non-JSON body */
     }
+    if (res.status >= 500) {
+        const ref = data && data.request_id ? ` (код: ${data.request_id})` : "";
+        throw { status: res.status, detail: `Щось пішло не так на сервері. Спробуйте пізніше${ref}` };
+    }
     if (!res.ok) throw { status: res.status, detail: normalizeDetail(data && data.detail, res.status) };
     return data;
   }

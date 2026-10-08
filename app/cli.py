@@ -5,6 +5,10 @@
 
 Admins can not register through the public API (by design): they are created
 here, by someone with access to the server.
+
+The target database is chosen with APP_ENV (sandbox | production), e.g.:
+
+    APP_ENV=sandbox python -m app.cli seed-demo
 """
 
 import argparse
@@ -17,6 +21,7 @@ from decimal import Decimal
 from pydantic import ValidationError
 from sqlalchemy import func, select
 
+from app.core.config import settings
 from app.db.session import SessionLocal, engine
 from app.models.artifact import Artifact
 from app.models.auction import Auction
@@ -27,10 +32,10 @@ from app.services import auctions as auction_service
 from app.services import users
 from app.services.errors import ConflictError
 
-DEMO_ADMIN = ("admin", "admin@example.com", "Admin12345!")
+DEMO_ADMIN = ("admin", "admin@example.com")
 DEMO_USERS = [
-    ("alice", "alice@example.com", "Password123!", Decimal("5000")),
-    ("bob", "bob@example.com", "Password123!", Decimal("3000")),
+    ("alice", "alice@example.com", Decimal("5000")),
+    ("bob", "bob@example.com", Decimal("3000")),
 ]
 DEMO_ARTIFACTS = [
     ("Crystal of Andromeda", "Glows in the presence of dark matter", "legendary"),
@@ -71,8 +76,16 @@ async def create_admin(username: str, email: str, password: str | None) -> int:
 
 
 async def seed_demo() -> int:
-    await _create(*DEMO_ADMIN, UserRole.ADMIN)
-    for username, email, password, balance in DEMO_USERS:
+    if settings.is_production:
+        print("seed-demo is disabled in production")
+        return 1
+    password = settings.demo_password
+    if not password:
+        print("Set DEMO_PASSWORD in .env.<env> to use seed-demo")
+        return 1
+
+    await _create(*DEMO_ADMIN, password, UserRole.ADMIN)
+    for username, email, balance in DEMO_USERS:
         if await _create(username, email, password, UserRole.USER):
             async with SessionLocal() as session:
                 user = await users.get_by_username(session, username)
@@ -101,14 +114,15 @@ async def seed_demo() -> int:
             )
             print("Created 1 active auction (2 hours)")
 
-    print("\nDemo accounts:")
-    print(f"  admin: {DEMO_ADMIN[0]} / {DEMO_ADMIN[2]}")
-    for username, _, password, _ in DEMO_USERS:
-        print(f"  user:  {username} / {password}")
+    print("\nDemo accounts (password = DEMO_PASSWORD):")
+    print(f"  admin: {DEMO_ADMIN[0]}")
+    for username, _, _ in DEMO_USERS:
+        print(f"  user:  {username}")
     return 0
 
 
 async def _run(args: argparse.Namespace) -> int:
+    print(f"[{settings.app_env}] database: {settings.postgres_db}")
     try:
         if args.command == "create-admin":
             return await create_admin(args.username, args.email, args.password)

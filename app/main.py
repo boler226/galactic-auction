@@ -1,6 +1,8 @@
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
+from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
@@ -13,6 +15,8 @@ from app.services.errors import DomainError
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
+logger = logging.getLogger("app")
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -23,14 +27,35 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 def create_app() -> FastAPI:
     application = FastAPI(
         title=settings.app_name,
-        version="0.2.0",
-        description="High-load galactic artifact auction. Lab 2: users and roles.",
+        version="0.3.0",
+        description="High-load galactic artifact auction.",
         lifespan=lifespan,
+        debug=settings.debug,
+        # no public API docs in production
+        docs_url=None if settings.is_production else "/docs",
+        redoc_url=None if settings.is_production else "/redoc",
+        openapi_url=None if settings.is_production else "/openapi.json",
     )
 
     @application.exception_handler(DomainError)
     async def domain_error_handler(_: Request, exc: DomainError) -> JSONResponse:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+    @application.exception_handler(Exception)
+    async def unhandled_error_handler(request: Request, exc: Exception) -> JSONResponse:
+        request_id = uuid4().hex[:12]
+        # the full traceback goes to the server log only
+        logger.error(
+            "Unhandled error [%s] %s %s",
+            request_id,
+            request.method,
+            request.url.path,
+            exc_info=exc,
+        )
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal server error", "request_id": request_id},
+        )
 
     for router in (
         health.router,

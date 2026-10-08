@@ -1,34 +1,30 @@
 services:
-  db:
+  db-sandbox:
     image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-auction}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-auction}
-      POSTGRES_DB: ${POSTGRES_DB:-galactic_auction}
+    env_file: .env.sandbox
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_sandbox:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-auction} -d ${POSTGRES_DB:-galactic_auction}"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 3s
       retries: 10
 
-  app:
-    build: .
-    env_file: .env
-    environment:
-      POSTGRES_HOST: db
+  db-production:
+    image: postgres:16-alpine
+    env_file: .env.production
     ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
-
-  # Planned for next labs:
-  # redis:  cache + Pub/Sub for WebSocket fan-out between app instances
-  # nginx:  load balancer / reverse proxy in front of several app replicas
+      - "5433:5432"
+    volumes:
+      - pgdata_production:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
-  pgdata:
+  pgdata_sandbox:
+  pgdata_production:
