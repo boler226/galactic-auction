@@ -6,7 +6,11 @@ Environment variables must be set BEFORE the app is imported.
 
 import os
 
-os.environ["BCRYPT_ROUNDS"] = "4"  # fast hashing in tests
+os.environ["APP_ENV"] = "test"  # no .env file is read
+os.environ["POSTGRES_USER"] = "test"
+os.environ["POSTGRES_PASSWORD"] = "test"
+os.environ["POSTGRES_DB"] = "galactic_test"
+os.environ["BCRYPT_ROUNDS"] = "4"
 os.environ["SECRET_KEY"] = "test-secret-key-for-pytest-only-0123456789abcdef"
 
 from dataclasses import dataclass  # noqa: E402
