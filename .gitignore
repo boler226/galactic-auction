@@ -16,3 +16,5 @@ build/
 htmlcov/
 pgdata/
 .vs/
+loadtests/results/*.csv
+.venv-load/
