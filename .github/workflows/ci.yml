@@ -1,34 +1,30 @@
-services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-auction}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-auction}
-      POSTGRES_DB: ${POSTGRES_DB:-galactic_auction}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-auction} -d ${POSTGRES_DB:-galactic_auction}"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
+name: CI
 
-  app:
-    build: .
-    env_file: .env
-    environment:
-      POSTGRES_HOST: db
-    ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
+on:
+  pull_request:
+  push:
+    branches: [main]
 
-  # Planned for next labs:
-  # redis:  cache + Pub/Sub for WebSocket fan-out between app instances
-  # nginx:  load balancer / reverse proxy in front of several app replicas
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-volumes:
-  pgdata:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Black
+        run: black --check .
+
+      - name: Flake8
+        run: flake8
+
+      - name: Pytest
+        run: pytest
