@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     env_file: .env.sandbox
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - pgdata_sandbox:/var/lib/postgresql/data
     healthcheck:
