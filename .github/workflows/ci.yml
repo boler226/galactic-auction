@@ -53,8 +53,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.29.0
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           image-ref: galactic-auction:ci
           severity: CRITICAL,HIGH
