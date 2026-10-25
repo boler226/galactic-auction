@@ -1,5 +1,11 @@
+# VCS / CI / IDE
 .git
 .github
+.idea
+.vscode
+.vs
+
+# virtual environments and caches
 .venv
 venv
 .venv-load
@@ -7,18 +13,26 @@ __pycache__
 *.py[cod]
 .pytest_cache
 .mypy_cache
-.idea
-.vscode
-.vs
+.coverage
+htmlcov
+
+# secrets: env files are passed at runtime (env_file), never baked into the image
 .env
 .env.*
 !.env.*.example
+
+# logs and local data
+*.log
+logs
 pgdata
-dist
-build
-htmlcov
-.coverage
+
+# not needed at runtime
 tests
 docs
 scripts
 loadtests
+dist
+build
+docker-compose*.yml
+Dockerfile
+.dockerignore

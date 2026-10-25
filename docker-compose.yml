@@ -1,4 +1,26 @@
+# Sandbox stack (default):     docker compose up --build
+# Production stack (profile):  docker compose --profile production up --build
+#
+# Env files .env.sandbox / .env.production are read by compose (env_file).
+# Inside containers the database is reachable by its service name on port 5432,
+# so POSTGRES_HOST / POSTGRES_PORT are overridden below.
+
+x-app: &app
+  build: .
+  image: galactic-auction:latest
+  healthcheck:
+    test:
+      - CMD
+      - python
+      - -c
+      - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')"
+    interval: 10s
+    timeout: 5s
+    retries: 5
+    start_period: 30s
+
 services:
+  # ---------------- sandbox (default) ----------------
   db-sandbox:
     image: postgres:16-alpine
     env_file: .env.sandbox
@@ -6,24 +28,63 @@ services:
       - "5434:5432"
     volumes:
       - pgdata_sandbox:/var/lib/postgresql/data
+    networks:
+      - sandbox_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 3s
       retries: 10
 
+  app-sandbox:
+    <<: *app
+    env_file: .env.sandbox
+    environment:
+      POSTGRES_HOST: db-sandbox
+      POSTGRES_PORT: "5432"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db-sandbox:
+        condition: service_healthy
+    networks:
+      - sandbox_net
+
+  # ---------------- production (profile "production") ----------------
   db-production:
+    profiles: ["production"]
     image: postgres:16-alpine
     env_file: .env.production
     ports:
       - "5433:5432"
     volumes:
       - pgdata_production:/var/lib/postgresql/data
+    networks:
+      - production_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 3s
       retries: 10
+
+  app-production:
+    <<: *app
+    profiles: ["production"]
+    env_file: .env.production
+    environment:
+      POSTGRES_HOST: db-production
+      POSTGRES_PORT: "5432"
+    ports:
+      - "8001:8000"
+    depends_on:
+      db-production:
+        condition: service_healthy
+    networks:
+      - production_net
+
+networks:
+  sandbox_net:
+  production_net:
 
 volumes:
   pgdata_sandbox:
