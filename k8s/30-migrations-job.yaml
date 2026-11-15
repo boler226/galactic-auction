@@ -1,0 +1,33 @@
+# DVO-L3-7F2A91
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auction-migrations
+  namespace: galactic-auction
+  labels:
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: auction-migrations
+        mascot: kabachok
+      annotations:
+        devops-lab/mascot-approved: "true"
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrations
+          image: galactic-auction:1.0.0
+          imagePullPolicy: IfNotPresent
+          command: [sh, -c, 'python -m lab_runtime.wait_database && alembic upgrade head']
+          envFrom:
+            - configMapRef: {name: auction-config}
+            - secretRef: {name: auction-secret}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: "1", memory: 256Mi}

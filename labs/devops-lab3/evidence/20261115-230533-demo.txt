@@ -1,0 +1,900 @@
+# DVO-L3-7F2A91
+**********************
+PowerShell transcript start
+Start time: 20261115230533
+Username: DESKTOP-AKE41CN\User
+RunAs User: DESKTOP-AKE41CN\User
+Configuration Name:
+Machine: DESKTOP-AKE41CN (Microsoft Windows NT 10.0.22631.0)
+Host Application: C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& ./labs/devops-lab3/demo.ps1
+Process ID: 27428
+PSVersion: 7.6.9
+PSEdition: Core
+GitCommitId: 7.6.9
+OS: Microsoft Windows 10.0.22631
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is D:\Users\User\PycharmProjects\galactic-auction\labs\devops-lab3\evidence\20261115-230533-demo.txt
+=== 5: cluster, resources and configuration ===
+NAME               STATUS   ROLES           AGE   VERSION
+galactic-auction   Ready    control-plane   18m   v1.37.0
+NAME                                       READY   STATUS    RESTARTS      AGE
+coredns-559f6c778d-9h9q9                   1/1     Running   0             17m
+etcd-galactic-auction                      1/1     Running   0             17m
+kindnet-rw98v                              1/1     Running   0             17m
+kube-apiserver-galactic-auction            1/1     Running   0             17m
+kube-controller-manager-galactic-auction   1/1     Running   0             17m
+kube-proxy-gg7lt                           1/1     Running   0             17m
+kube-scheduler-galactic-auction            1/1     Running   0             17m
+metrics-server-768f9f6999-49462            1/1     Running   0             17m
+storage-provisioner                        1/1     Running   1 (14m ago)   17m
+NAME                            READY   STATUS      RESTARTS   AGE
+pod/auction-5846964cdd-bwsks    1/1     Running     0          4m11s
+pod/auction-5846964cdd-lvssc    1/1     Running     0          3m56s
+pod/auction-migrations-b899b    0/1     Completed   0          15m
+pod/postgres-58df78bf76-pzwg9   1/1     Running     0          15m
+pod/traffic-probe               1/1     Running     0          15m
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/auction    2/2     2            2           15m
+deployment.apps/postgres   1/1     1            1           15m
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/auction-557565dd7     0         0         0       3m38s
+replicaset.apps/auction-5846964cdd    2         2         2       15m
+replicaset.apps/auction-74cfc48d9c    0         0         0       4m39s
+replicaset.apps/postgres-58df78bf76   1         1         1       15m
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/auction    NodePort    10.107.28.181    <none>        80:30080/TCP   15m
+service/postgres   ClusterIP   10.106.136.121   <none>        5432/TCP       15m
+
+NAME                                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/postgres-data   Bound    pvc-941afe6d-b122-4eb8-b252-dac0ae130bcf   1Gi        RWO            standard       <unset>                 15m
+
+NAME                           STATUS     COMPLETIONS   DURATION   AGE
+job.batch/auction-migrations   Complete   1/1           68s        15m
+{'APP_ENV': 'sandbox', 'APP_NAME': 'Galactic Auction - Kubernetes Lab', 'POSTGRES_HOST': 'postgres'}
+{'POSTGRES_PASSWORD': True, 'SECRET_KEY': True}
+=== 6a: self healing ===
+pod "auction-5846964cdd-bwsks" deleted from galactic-auction namespace
+Waiting for deployment "auction" rollout to finish: 1 of 2 updated replicas are available...
+Waiting for deployment "auction" rollout to finish: 1 of 2 updated replicas are available...
+deployment "auction" successfully rolled out
+NAME                       READY   STATUS    RESTARTS   AGE     IP            NODE               NOMINATED NODE   READINESS GATES
+auction-5846964cdd-84bbl   1/1     Running   0          13s     10.244.0.20   galactic-auction   <none>           <none>
+auction-5846964cdd-lvssc   1/1     Running   0          4m10s   10.244.0.17   galactic-auction   <none>           <none>
+=== 6b: scaling and traffic distribution ===
+deployment.apps/auction scaled
+Waiting for deployment "auction" rollout to finish: 2 of 3 updated replicas are available...
+Waiting for deployment "auction" rollout to finish: 2 of 3 updated replicas are available...
+deployment "auction" successfully rolled out
+{"time": 1794776763.453003, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776763.6576827, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776763.8607705, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776764.0633957, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776764.2676358, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776764.4715867, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776764.6748343, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776764.8793082, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776765.0832763, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776765.2868826, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776765.4910307, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776765.6947505, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776765.9165876, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776766.1206055, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776766.3235204, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776766.527392, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776766.730585, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776766.9343052, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776767.1378245, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776767.3408492, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776767.5439742, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776767.7468808, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776767.949998, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776768.1533227, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776768.3570888, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776768.5608575, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776768.7653081, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776768.9680676, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776769.1712818, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776769.375002, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776769.578624, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776769.7821796, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776769.9853148, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776770.1889744, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776770.3921542, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776770.5955758, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776770.798274, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776771.0014236, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776771.204784, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776771.4078202, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776771.6111147, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776771.8148434, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776772.0179825, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776772.2206457, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776772.424056, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776772.627319, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776772.8302417, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776773.0339234, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776773.2372856, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776773.441347, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776773.6449614, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776773.8480346, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776774.0509965, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776774.254437, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776774.45718, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776774.659724, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776774.8630497, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776775.0672076, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776775.2710583, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776775.4743912, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776775.6779537, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776775.8818042, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776776.0854018, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776776.2881591, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776776.4912992, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776776.6950736, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776776.8983026, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776777.1021066, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776777.3062656, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776777.5094142, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776777.713436, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776777.9164302, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776778.1193051, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"summary": true, "requests": 73, "failures": 0, "pods": {"auction-5846964cdd-k85x9": 18, "auction-5846964cdd-lvssc": 39, "auction-5846964cdd-84bbl": 16}, "versions": {"1.0.0": 73}}
+=== 6c-e: rolling update, history, rollback, continuous traffic ===
+deployment.apps/auction image updated
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+deployment "auction" successfully rolled out
+NAME                       READY   STATUS        RESTARTS   AGE     IP            NODE               NOMINATED NODE   READINESS GATES
+auction-5846964cdd-lvssc   1/1     Terminating   0          5m20s   10.244.0.17   galactic-auction   <none>           <none>
+auction-74cfc48d9c-glntz   1/1     Running       0          11s     10.244.0.24   galactic-auction   <none>           <none>
+auction-74cfc48d9c-lf8nq   1/1     Running       0          22s     10.244.0.23   galactic-auction   <none>           <none>
+auction-74cfc48d9c-xdq64   1/1     Running       0          36s     10.244.0.22   galactic-auction   <none>           <none>
+deployment.apps/auction
+REVISION  CHANGE-CAUSE
+4         <none>
+5         <none>
+6         <none>
+
+1.1.0
+deployment.apps/auction rolled back
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "auction" rollout to finish: 1 old replicas are pending termination...
+deployment "auction" successfully rolled out
+{"time": 1794776781.9298668, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776782.1338425, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776782.3368895, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776782.5400863, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776782.7432628, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776782.9461653, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776783.1491845, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776783.3522918, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776783.555428, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776783.758378, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776783.9622765, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776784.1663895, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776784.3694484, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776784.57271, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776784.776028, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776784.9809105, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776785.1838613, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776785.3872578, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776785.5904357, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776785.793376, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776785.9968061, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776786.2001522, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776786.4038503, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776786.6052587, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776786.8092594, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776787.0128317, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776787.2158933, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776787.419447, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776787.6234183, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776787.8271947, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776788.0313063, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776788.2354155, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776788.4387624, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776788.6417794, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776788.8449562, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776789.0483797, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776789.2517285, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776789.454983, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776789.6582992, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776789.8614805, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776790.0642433, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776790.2687907, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776790.524558, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776790.7285287, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776790.9316201, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776791.1345189, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776791.337599, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776791.54116, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776791.7450702, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776791.9484162, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776792.1511438, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776792.3547995, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776792.5580952, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776792.762717, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776792.966757, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776793.1709533, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776793.374078, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776793.577149, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776793.779847, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776793.9832149, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-84bbl"}
+{"time": 1794776794.1857705, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776794.3887095, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776794.5928144, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776794.7960484, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776795.0002387, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776795.2268875, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776795.430108, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776795.6345189, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776795.8383949, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776796.0427186, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776796.2457845, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776796.4488862, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776796.651967, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776796.8554425, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776797.0590131, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776797.2619753, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776797.4647973, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776797.667869, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776797.8713186, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776798.0746036, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776798.2777503, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776798.4805949, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776798.6836767, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776798.887726, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776799.0905044, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776799.2937355, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776799.4966304, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776799.7001667, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776799.9037018, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776800.1066766, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776800.3111596, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776800.5146713, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776800.7179549, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776800.9211528, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776801.1247404, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776801.3278136, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776801.5309687, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776801.752475, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776801.955571, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776802.1588097, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776802.36162, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776802.565556, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776802.7704482, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776802.9751587, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776803.1787822, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776803.3824847, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776803.5858138, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776803.789352, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776803.992483, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776804.1961641, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776804.3990395, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776804.601872, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776804.8048313, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776805.0116029, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776805.2150326, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776805.4181716, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776805.6213646, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776805.8245237, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-k85x9"}
+{"time": 1794776806.030046, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776806.233807, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776806.4370644, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776806.6405332, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776806.8444984, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776807.0475452, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776807.2517858, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776807.4556134, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776807.658705, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776807.8623564, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776808.065445, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776808.2685845, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776808.4714525, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776808.6746216, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776808.9259782, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776809.129139, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776809.3326921, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776809.5360348, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776809.7393193, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776809.9425073, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776810.145974, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776810.3500373, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776810.5534246, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776810.7561584, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776810.959413, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776811.1627033, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776811.3660169, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776811.56934, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776811.7723463, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776811.9763005, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776812.1794422, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776812.3824897, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776812.585499, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776812.7884965, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776812.991318, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776813.1945271, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776813.3978388, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776813.6191394, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776813.8230705, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776814.0263681, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776814.2295218, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776814.4329064, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776814.6361964, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776814.8396566, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776815.0442543, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776815.2477684, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776815.4508772, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-lvssc"}
+{"time": 1794776815.6544213, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776815.8572776, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776816.0602872, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776816.2646804, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776816.4673855, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776816.6691844, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776816.8723247, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776817.075162, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776817.2783093, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776817.4817858, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776817.7248003, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776817.928092, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776818.1314297, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776818.3344057, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776818.537952, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776818.7416706, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776818.944957, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776819.1477845, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776819.351585, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776819.5548246, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776819.757804, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776819.9613938, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776820.1650598, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776820.3708735, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776820.5743012, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776820.7788215, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776820.9826014, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776821.186084, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776821.3891275, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776821.5922387, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776821.7959106, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776821.9992282, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776822.2038288, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776822.4069433, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776822.6113675, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776822.814968, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776823.023997, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776823.227118, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776823.4304988, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776823.6343834, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776823.8369918, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776824.0399635, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776824.243151, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776824.446754, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776824.6494396, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776824.8524868, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776825.056323, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776825.260156, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776825.4635005, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776825.6667724, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776825.869536, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776826.0730903, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776826.276021, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776826.47867, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776826.7001789, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776826.903512, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776827.1068168, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776827.3099763, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776827.5137293, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776827.7171981, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776827.9200404, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776828.1236308, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776828.3269186, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776828.5299385, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776828.7336967, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776828.937415, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776829.1408854, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776829.3436677, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776829.5475128, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776829.7505343, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776829.953568, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776830.1566045, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776830.3605928, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776830.5639021, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776830.7672887, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776830.971534, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-lf8nq"}
+{"time": 1794776831.1742082, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776831.3775082, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776831.5812182, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776831.7845886, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776832.0236657, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776832.227787, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776832.4331846, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776832.636193, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776832.8403885, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776833.0441725, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776833.2474964, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776833.450473, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776833.6533089, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776833.8561864, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776834.0595293, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776834.2632418, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776834.4661722, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776834.668924, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776834.872368, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776835.0798423, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776835.283008, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776835.4861715, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776835.6895626, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776835.892647, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776836.095621, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776836.2991257, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776836.5025275, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776836.705788, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776836.9091659, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776837.1122243, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776837.315908, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776837.5190809, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776837.722009, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776837.9253192, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776838.1284528, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776838.3318536, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776838.5348186, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776838.7379854, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776838.9414904, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776839.1448345, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776839.3478413, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776839.5508356, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776839.7541642, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-xrjgr"}
+{"time": 1794776839.9917307, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-bqd24"}
+{"time": 1794776840.1963706, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776840.4007852, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776840.6046455, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776840.808934, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776841.0125175, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776841.2157586, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-glntz"}
+{"time": 1794776841.4187016, "ok": true, "version": "1.1.0", "pod": "auction-74cfc48d9c-xdq64"}
+{"time": 1794776841.6225479, "ok": true, "version": "1.0.0", "pod": "auction-5846964cdd-bqd24"}
+{"summary": true, "requests": 293, "failures": 0, "pods": {"auction-5846964cdd-84bbl": 20, "auction-5846964cdd-lvssc": 52, "auction-5846964cdd-k85x9": 33, "auction-74cfc48d9c-xdq64": 83, "auction-74cfc48d9c-lf8nq": 41, "auction-74cfc48d9c-glntz": 44, "auction-5846964cdd-xrjgr": 18, "auction-5846964cdd-bqd24": 2}, "versions": {"1.0.0": 125, "1.1.0": 168}}
+=== 7: intentional failure, diagnosis and repair ===
+deployment.apps/auction image updated
+NAME                       READY   STATUS             RESTARTS   AGE
+auction-557565dd7-zvptv    0/1     ImagePullBackOff   0          48s
+auction-5846964cdd-bhs44   1/1     Running            0          59s
+auction-5846964cdd-bqd24   1/1     Running            0          72s
+auction-5846964cdd-xrjgr   1/1     Running            0          86s
+Name:             auction-557565dd7-zvptv
+Namespace:        galactic-auction
+Priority:         0
+Service Account:  default
+Node:             galactic-auction/192.168.49.2
+Start Time:       Sun, 15 Nov 2026 23:07:35 +0200
+Labels:           app=auction
+                  mascot=kabachok
+                  pod-template-hash=557565dd7
+Annotations:      devops-lab/mascot-approved: true
+Status:           Pending
+IP:               10.244.0.28
+IPs:
+  IP:           10.244.0.28
+Controlled By:  ReplicaSet/auction-557565dd7
+Init Containers:
+  wait-schema:
+    Container ID:  containerd://75a390a3a9ca765bec8c1f3bb583432d4deff29a281a9e5db82b61990675dfa7
+    Image:         galactic-auction:1.0.0
+    Image ID:      sha256:e99b45bedd7c55535a82be25cc6d07d5c95701791aed2bb02b95e329bd81d128
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      python
+      -m
+      lab_runtime.wait_database
+      --schema
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sun, 15 Nov 2026 23:07:36 +0200
+      Finished:     Sun, 15 Nov 2026 23:07:39 +0200
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:     50m
+      memory:  64Mi
+    Environment Variables from:
+      auction-config  ConfigMap  Optional: false
+      auction-secret  Secret     Optional: false
+    Environment:      <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-2lwhz (ro)
+Containers:
+  app:
+    Container ID:
+    Image:          galactic-auction:does-not-exist-lab3
+    Image ID:
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/health delay=0s timeout=2s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/health/db delay=0s timeout=2s period=3s #success=1 #failure=3
+    Startup:    http-get http://:http/health delay=0s timeout=1s period=2s #success=1 #failure=30
+    Environment Variables from:
+      auction-config  ConfigMap  Optional: false
+      auction-secret  Secret     Optional: false
+    Environment:      <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-2lwhz (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-2lwhz:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  48s               default-scheduler  Successfully assigned galactic-auction/auction-557565dd7-zvptv to galactic-auction
+  Normal   Pulled     47s               kubelet            spec.initContainers{wait-schema}: Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+  Normal   Created    47s               kubelet            spec.initContainers{wait-schema}: Container created
+  Normal   Started    47s               kubelet            spec.initContainers{wait-schema}: Container started
+  Normal   BackOff    15s               kubelet            spec.containers{app}: Back-off pulling image "galactic-auction:does-not-exist-lab3"
+  Warning  Failed     15s               kubelet            spec.containers{app}: Error: ImagePullBackOff
+  Normal   Pulling    2s (x3 over 43s)  kubelet            spec.containers{app}: Pulling image "galactic-auction:does-not-exist-lab3"
+  Warning  Failed     1s (x3 over 42s)  kubelet            spec.containers{app}: Failed to pull image "galactic-auction:does-not-exist-lab3": failed to pull and unpack image "docker.io/library/galactic-auction:does-not-exist-lab3": failed to resolve reference "docker.io/library/galactic-auction:does-not-exist-lab3": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+  Warning  Failed     1s (x3 over 42s)  kubelet            spec.containers{app}: Error: ErrImagePull
+LAST SEEN   TYPE      REASON                  OBJECT                                MESSAGE
+17m         Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-4vtvs
+17m         Normal    SuccessfulCreate        job/auction-migrations                Created pod: auction-migrations-b899b
+17m         Normal    ScalingReplicaSet       deployment/auction                    Scaled up replica set auction-5846964cdd from 0 to 2
+17m         Normal    Scheduled               pod/auction-migrations-b899b          Successfully assigned galactic-auction/auction-migrations-b899b to galactic-auction
+17m         Normal    Scheduled               pod/traffic-probe                     Successfully assigned galactic-auction/traffic-probe to galactic-auction
+17m         Normal    ScalingReplicaSet       deployment/postgres                   Scaled up replica set postgres-58df78bf76 from 0 to 1
+17m         Normal    ProvisioningSucceeded   persistentvolumeclaim/postgres-data   Successfully provisioned volume pvc-941afe6d-b122-4eb8-b252-dac0ae130bcf
+17m         Normal    Provisioning            persistentvolumeclaim/postgres-data   External provisioner is provisioning volume for claim "galactic-auction/postgres-data"
+17m         Normal    SuccessfulCreate        replicaset/postgres-58df78bf76        Created pod: postgres-58df78bf76-pzwg9
+17m         Normal    ExternalProvisioning    persistentvolumeclaim/postgres-data   Waiting for a volume to be created either by the external provisioner 'k8s.io/minikube-hostpath' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+17m         Normal    Scheduled               pod/auction-5846964cdd-ml57w          Successfully assigned galactic-auction/auction-5846964cdd-ml57w to galactic-auction
+17m         Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-ml57w
+17m         Normal    Scheduled               pod/auction-5846964cdd-4vtvs          Successfully assigned galactic-auction/auction-5846964cdd-4vtvs to galactic-auction
+17m         Normal    Scheduled               pod/postgres-58df78bf76-pzwg9         Successfully assigned galactic-auction/postgres-58df78bf76-pzwg9 to galactic-auction
+17m         Normal    Pulling                 pod/postgres-58df78bf76-pzwg9         Pulling image "postgres:16-alpine"
+17m         Normal    Created                 pod/auction-5846964cdd-4vtvs          Container created
+17m         Normal    Pulled                  pod/auction-5846964cdd-ml57w          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+17m         Normal    Created                 pod/auction-5846964cdd-ml57w          Container created
+17m         Normal    Pulled                  pod/auction-migrations-b899b          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+17m         Normal    Pulled                  pod/auction-5846964cdd-4vtvs          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+17m         Normal    Started                 pod/auction-5846964cdd-ml57w          Container started
+17m         Normal    Pulled                  pod/traffic-probe                     Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+17m         Normal    Created                 pod/auction-migrations-b899b          Container created
+17m         Normal    Started                 pod/auction-migrations-b899b          Container started
+17m         Normal    Started                 pod/auction-5846964cdd-4vtvs          Container started
+17m         Normal    Started                 pod/traffic-probe                     Container started
+17m         Normal    Created                 pod/traffic-probe                     Container created
+17m         Normal    Started                 pod/postgres-58df78bf76-pzwg9         Container started
+17m         Normal    Created                 pod/postgres-58df78bf76-pzwg9         Container created
+16m         Warning   Unhealthy               pod/postgres-58df78bf76-pzwg9         Readiness probe failed: /var/run/postgresql:5432 - no response
+17m         Normal    Pulled                  pod/postgres-58df78bf76-pzwg9         Successfully pulled image "postgres:16-alpine" in 33.958s (33.958s including waiting). Image size: 116258321 bytes.
+16m         Normal    Created                 pod/auction-5846964cdd-4vtvs          Container created
+16m         Normal    Pulled                  pod/auction-5846964cdd-4vtvs          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+16m         Normal    Pulled                  pod/auction-5846964cdd-ml57w          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+16m         Normal    Created                 pod/auction-5846964cdd-ml57w          Container created
+16m         Normal    Started                 pod/auction-5846964cdd-ml57w          Container started
+16m         Normal    Started                 pod/auction-5846964cdd-4vtvs          Container started
+16m         Normal    Completed               job/auction-migrations                Job completed
+16m         Warning   Unhealthy               pod/auction-5846964cdd-4vtvs          Startup probe failed: Get "http://10.244.0.8:8000/health": dial tcp 10.244.0.8:8000: connect: connection refused
+16m         Warning   Unhealthy               pod/auction-5846964cdd-ml57w          Startup probe failed: Get "http://10.244.0.9:8000/health": dial tcp 10.244.0.9:8000: connect: connection refused
+8m50s       Normal    Killing                 pod/auction-5846964cdd-4vtvs          Stopping container app
+8m49s       Normal    Scheduled               pod/auction-5846964cdd-zs2mx          Successfully assigned galactic-auction/auction-5846964cdd-zs2mx to galactic-auction
+8m50s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-zs2mx
+8m44s       Warning   Unhealthy               pod/auction-5846964cdd-4vtvs          Readiness probe failed: Get "http://10.244.0.8:8000/health/db": dial tcp 10.244.0.8:8000: connect: connection refused
+8m46s       Normal    Pulled                  pod/auction-5846964cdd-zs2mx          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+8m46s       Normal    Created                 pod/auction-5846964cdd-zs2mx          Container created
+8m45s       Normal    Started                 pod/auction-5846964cdd-zs2mx          Container started
+8m41s       Normal    Started                 pod/auction-5846964cdd-zs2mx          Container started
+8m39s       Warning   Unhealthy               pod/auction-5846964cdd-zs2mx          Startup probe failed: Get "http://10.244.0.12:8000/health": dial tcp 10.244.0.12:8000: connect: connection refused
+8m41s       Normal    Created                 pod/auction-5846964cdd-zs2mx          Container created
+8m41s       Normal    Pulled                  pod/auction-5846964cdd-zs2mx          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+59s         Normal    ScalingReplicaSet       deployment/auction                    Scaled up replica set auction-5846964cdd from 2 to 3
+8m32s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-cmhvt
+8m32s       Normal    Scheduled               pod/auction-5846964cdd-cmhvt          Successfully assigned galactic-auction/auction-5846964cdd-cmhvt to galactic-auction
+8m31s       Normal    Pulled                  pod/auction-5846964cdd-cmhvt          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+8m29s       Normal    Started                 pod/auction-5846964cdd-cmhvt          Container started
+8m29s       Normal    Created                 pod/auction-5846964cdd-cmhvt          Container created
+8m19s       Normal    Pulled                  pod/auction-5846964cdd-cmhvt          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+8m18s       Normal    Created                 pod/auction-5846964cdd-cmhvt          Container created
+8m17s       Normal    Started                 pod/auction-5846964cdd-cmhvt          Container started
+8m13s       Warning   Unhealthy               pod/auction-5846964cdd-cmhvt          Startup probe failed: Get "http://10.244.0.13:8000/health": dial tcp 10.244.0.13:8000: connect: connection refused
+7m49s       Normal    Killing                 pod/auction-5846964cdd-cmhvt          Stopping container app
+108s        Normal    ScalingReplicaSet       deployment/auction                    Scaled down replica set auction-5846964cdd from 3 to 2
+7m49s       Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-cmhvt
+7m41s       Warning   Unhealthy               pod/auction-5846964cdd-cmhvt          Readiness probe failed: Get "http://10.244.0.13:8000/health/db": dial tcp 10.244.0.13:8000: connect: connection refused
+7m29s       Normal    SuccessfulCreate        replicaset/auction-74cfc48d9c         Created pod: auction-74cfc48d9c-rf9sp
+7m29s       Normal    Scheduled               pod/auction-74cfc48d9c-rf9sp          Successfully assigned galactic-auction/auction-74cfc48d9c-rf9sp to galactic-auction
+2m2s        Normal    ScalingReplicaSet       deployment/auction                    Scaled up replica set auction-74cfc48d9c from 0 to 1
+7m28s       Normal    Started                 pod/auction-74cfc48d9c-rf9sp          Container started
+7m28s       Normal    Created                 pod/auction-74cfc48d9c-rf9sp          Container created
+7m28s       Normal    Pulled                  pod/auction-74cfc48d9c-rf9sp          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+7m24s       Normal    Pulled                  pod/auction-74cfc48d9c-rf9sp          Container image "galactic-auction:1.1.0" already present on machine and can be accessed by the pod
+7m24s       Normal    Created                 pod/auction-74cfc48d9c-rf9sp          Container created
+7m24s       Normal    Started                 pod/auction-74cfc48d9c-rf9sp          Container started
+7m22s       Warning   Unhealthy               pod/auction-74cfc48d9c-rf9sp          Startup probe failed: Get "http://10.244.0.14:8000/health": dial tcp 10.244.0.14:8000: connect: connection refused
+7m15s       Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-zs2mx
+7m15s       Normal    ScalingReplicaSet       deployment/auction                    Scaled up replica set auction-74cfc48d9c from 1 to 2
+7m15s       Normal    Scheduled               pod/auction-74cfc48d9c-rsjkz          Successfully assigned galactic-auction/auction-74cfc48d9c-rsjkz to galactic-auction
+7m15s       Normal    Killing                 pod/auction-5846964cdd-zs2mx          Stopping container app
+7m15s       Normal    Pulled                  pod/auction-74cfc48d9c-rsjkz          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+7m15s       Normal    Created                 pod/auction-74cfc48d9c-rsjkz          Container created
+97s         Normal    ScalingReplicaSet       deployment/auction                    Scaled down replica set auction-5846964cdd from 2 to 1
+7m15s       Normal    SuccessfulCreate        replicaset/auction-74cfc48d9c         Created pod: auction-74cfc48d9c-rsjkz
+7m14s       Normal    Started                 pod/auction-74cfc48d9c-rsjkz          Container started
+7m11s       Normal    Created                 pod/auction-74cfc48d9c-rsjkz          Container created
+7m9s        Warning   Unhealthy               pod/auction-74cfc48d9c-rsjkz          Startup probe failed: Get "http://10.244.0.15:8000/health": dial tcp 10.244.0.15:8000: connect: connection refused
+7m11s       Normal    Started                 pod/auction-74cfc48d9c-rsjkz          Container started
+7m11s       Normal    Pulled                  pod/auction-74cfc48d9c-rsjkz          Container image "galactic-auction:1.1.0" already present on machine and can be accessed by the pod
+7m2s        Warning   Unhealthy               pod/auction-5846964cdd-ml57w          Readiness probe failed: Get "http://10.244.0.9:8000/health/db": dial tcp 10.244.0.9:8000: connect: connection refused
+7m2s        Normal    Killing                 pod/auction-5846964cdd-ml57w          Stopping container app
+7m2s        Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-ml57w
+7m2s        Normal    ScalingReplicaSet       deployment/auction                    Scaled down replica set auction-5846964cdd from 1 to 0
+7m1s        Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-bwsks
+7m1s        Normal    Scheduled               pod/auction-5846964cdd-bwsks          Successfully assigned galactic-auction/auction-5846964cdd-bwsks to galactic-auction
+7m1s        Normal    ScalingReplicaSet       deployment/auction                    Scaled up replica set auction-5846964cdd from 0 to 1
+7m          Normal    Started                 pod/auction-5846964cdd-bwsks          Container started
+7m1s        Normal    Pulled                  pod/auction-5846964cdd-bwsks          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+7m          Normal    Created                 pod/auction-5846964cdd-bwsks          Container created
+6m56s       Normal    Started                 pod/auction-5846964cdd-bwsks          Container started
+6m56s       Normal    Pulled                  pod/auction-5846964cdd-bwsks          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+6m56s       Normal    Created                 pod/auction-5846964cdd-bwsks          Container created
+6m53s       Warning   Unhealthy               pod/auction-5846964cdd-bwsks          Startup probe failed: Get "http://10.244.0.16:8000/health": dial tcp 10.244.0.16:8000: connect: connection refused
+6m46s       Normal    SuccessfulDelete        replicaset/auction-74cfc48d9c         Deleted pod: auction-74cfc48d9c-rf9sp
+6m46s       Normal    Killing                 pod/auction-74cfc48d9c-rf9sp          Stopping container app
+6m46s       Normal    Scheduled               pod/auction-5846964cdd-lvssc          Successfully assigned galactic-auction/auction-5846964cdd-lvssc to galactic-auction
+72s         Normal    ScalingReplicaSet       deployment/auction                    (combined from similar events): Scaled up replica set auction-5846964cdd from 1 to 2
+59s         Normal    ScalingReplicaSet       deployment/auction                    Scaled down replica set auction-74cfc48d9c from 2 to 1
+6m46s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-lvssc
+6m45s       Normal    Created                 pod/auction-5846964cdd-lvssc          Container created
+6m45s       Normal    Started                 pod/auction-5846964cdd-lvssc          Container started
+6m45s       Normal    Pulled                  pod/auction-5846964cdd-lvssc          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+6m41s       Normal    Started                 pod/auction-5846964cdd-lvssc          Container started
+6m41s       Normal    Pulled                  pod/auction-5846964cdd-lvssc          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+6m41s       Normal    Created                 pod/auction-5846964cdd-lvssc          Container created
+6m38s       Warning   Unhealthy               pod/auction-5846964cdd-lvssc          Startup probe failed: Get "http://10.244.0.17:8000/health": dial tcp 10.244.0.17:8000: connect: connection refused
+6m31s       Normal    SuccessfulDelete        replicaset/auction-74cfc48d9c         Deleted pod: auction-74cfc48d9c-rsjkz
+6m31s       Normal    Killing                 pod/auction-74cfc48d9c-rsjkz          Stopping container app
+6m31s       Warning   Unhealthy               pod/auction-74cfc48d9c-rsjkz          Readiness probe failed: Get "http://10.244.0.15:8000/health/db": dial tcp 10.244.0.15:8000: connect: connection refused
+6m28s       Normal    Scheduled               pod/auction-557565dd7-rmg6j           Successfully assigned galactic-auction/auction-557565dd7-rmg6j to galactic-auction
+6m28s       Normal    SuccessfulCreate        replicaset/auction-557565dd7          Created pod: auction-557565dd7-rmg6j
+6m27s       Normal    Pulled                  pod/auction-557565dd7-rmg6j           Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+6m27s       Normal    Created                 pod/auction-557565dd7-rmg6j           Container created
+6m27s       Normal    Started                 pod/auction-557565dd7-rmg6j           Container started
+5m40s       Normal    Pulling                 pod/auction-557565dd7-rmg6j           Pulling image "galactic-auction:does-not-exist-lab3"
+5m39s       Warning   Failed                  pod/auction-557565dd7-rmg6j           Failed to pull image "galactic-auction:does-not-exist-lab3": failed to pull and unpack image "docker.io/library/galactic-auction:does-not-exist-lab3": failed to resolve reference "docker.io/library/galactic-auction:does-not-exist-lab3": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+5m39s       Warning   Failed                  pod/auction-557565dd7-rmg6j           Error: ErrImagePull
+5m55s       Warning   Failed                  pod/auction-557565dd7-rmg6j           Error: ImagePullBackOff
+5m55s       Normal    BackOff                 pod/auction-557565dd7-rmg6j           Back-off pulling image "galactic-auction:does-not-exist-lab3"
+5m36s       Normal    SuccessfulDelete        replicaset/auction-557565dd7          Deleted pod: auction-557565dd7-rmg6j
+4m39s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-xhk9p
+4m39s       Normal    Scheduled               pod/auction-5846964cdd-xhk9p          Successfully assigned galactic-auction/auction-5846964cdd-xhk9p to galactic-auction
+4m38s       Normal    Started                 pod/auction-5846964cdd-xhk9p          Container started
+4m38s       Normal    Created                 pod/auction-5846964cdd-xhk9p          Container created
+4m38s       Normal    Pulled                  pod/auction-5846964cdd-xhk9p          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+4m35s       Normal    Pulled                  pod/auction-5846964cdd-xhk9p          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+4m33s       Warning   Unhealthy               pod/auction-5846964cdd-xhk9p          Startup probe failed: Get "http://10.244.0.19:8000/health": dial tcp 10.244.0.19:8000: connect: connection refused
+4m35s       Normal    Started                 pod/auction-5846964cdd-xhk9p          Container started
+4m35s       Normal    Created                 pod/auction-5846964cdd-xhk9p          Container created
+4m7s        Normal    Killing                 pod/auction-5846964cdd-xhk9p          Stopping container app
+4m7s        Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-xhk9p
+4m5s        Warning   Unhealthy               pod/auction-5846964cdd-xhk9p          Readiness probe failed: Get "http://10.244.0.19:8000/health/db": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+2m49s       Normal    Killing                 pod/auction-5846964cdd-bwsks          Stopping container app
+2m49s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-84bbl
+2m49s       Normal    Created                 pod/auction-5846964cdd-84bbl          Container created
+2m49s       Normal    Pulled                  pod/auction-5846964cdd-84bbl          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+2m49s       Normal    Scheduled               pod/auction-5846964cdd-84bbl          Successfully assigned galactic-auction/auction-5846964cdd-84bbl to galactic-auction
+2m48s       Normal    Started                 pod/auction-5846964cdd-84bbl          Container started
+2m45s       Normal    Pulled                  pod/auction-5846964cdd-84bbl          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+2m45s       Normal    Created                 pod/auction-5846964cdd-84bbl          Container created
+2m45s       Normal    Started                 pod/auction-5846964cdd-84bbl          Container started
+2m43s       Warning   Unhealthy               pod/auction-5846964cdd-84bbl          Startup probe failed: Get "http://10.244.0.20:8000/health": dial tcp 10.244.0.20:8000: connect: connection refused
+2m36s       Normal    Started                 pod/auction-5846964cdd-k85x9          Container started
+2m36s       Normal    Scheduled               pod/auction-5846964cdd-k85x9          Successfully assigned galactic-auction/auction-5846964cdd-k85x9 to galactic-auction
+2m36s       Normal    Pulled                  pod/auction-5846964cdd-k85x9          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+2m36s       Normal    SuccessfulCreate        replicaset/auction-5846964cdd         Created pod: auction-5846964cdd-k85x9
+2m36s       Normal    Created                 pod/auction-5846964cdd-k85x9          Container created
+2m30s       Warning   Unhealthy               pod/auction-5846964cdd-k85x9          Startup probe failed: Get "http://10.244.0.21:8000/health": dial tcp 10.244.0.21:8000: connect: connection refused
+2m32s       Normal    Started                 pod/auction-5846964cdd-k85x9          Container started
+2m32s       Normal    Created                 pod/auction-5846964cdd-k85x9          Container created
+2m32s       Normal    Pulled                  pod/auction-5846964cdd-k85x9          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+2m2s        Normal    SuccessfulCreate        replicaset/auction-74cfc48d9c         Created pod: auction-74cfc48d9c-xdq64
+2m2s        Normal    Scheduled               pod/auction-74cfc48d9c-xdq64          Successfully assigned galactic-auction/auction-74cfc48d9c-xdq64 to galactic-auction
+2m1s        Normal    Pulled                  pod/auction-74cfc48d9c-xdq64          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+2m1s        Normal    Created                 pod/auction-74cfc48d9c-xdq64          Container created
+2m1s        Normal    Started                 pod/auction-74cfc48d9c-xdq64          Container started
+118s        Normal    Pulled                  pod/auction-74cfc48d9c-xdq64          Container image "galactic-auction:1.1.0" already present on machine and can be accessed by the pod
+118s        Normal    Created                 pod/auction-74cfc48d9c-xdq64          Container created
+118s        Normal    Started                 pod/auction-74cfc48d9c-xdq64          Container started
+115s        Warning   Unhealthy               pod/auction-74cfc48d9c-xdq64          Startup probe failed: Get "http://10.244.0.22:8000/health": dial tcp 10.244.0.22:8000: connect: connection refused
+108s        Normal    SuccessfulCreate        replicaset/auction-74cfc48d9c         Created pod: auction-74cfc48d9c-lf8nq
+108s        Normal    Killing                 pod/auction-5846964cdd-84bbl          Stopping container app
+108s        Normal    Created                 pod/auction-74cfc48d9c-lf8nq          Container created
+108s        Normal    Started                 pod/auction-74cfc48d9c-lf8nq          Container started
+108s        Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-84bbl
+108s        Normal    Pulled                  pod/auction-74cfc48d9c-lf8nq          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+108s        Normal    Scheduled               pod/auction-74cfc48d9c-lf8nq          Successfully assigned galactic-auction/auction-74cfc48d9c-lf8nq to galactic-auction
+105s        Normal    Pulled                  pod/auction-74cfc48d9c-lf8nq          Container image "galactic-auction:1.1.0" already present on machine and can be accessed by the pod
+105s        Normal    Created                 pod/auction-74cfc48d9c-lf8nq          Container created
+105s        Normal    Started                 pod/auction-74cfc48d9c-lf8nq          Container started
+104s        Warning   Unhealthy               pod/auction-74cfc48d9c-lf8nq          Startup probe failed: Get "http://10.244.0.23:8000/health": dial tcp 10.244.0.23:8000: connect: connection refused
+97s         Normal    Scheduled               pod/auction-74cfc48d9c-glntz          Successfully assigned galactic-auction/auction-74cfc48d9c-glntz to galactic-auction
+97s         Normal    SuccessfulCreate        replicaset/auction-74cfc48d9c         Created pod: auction-74cfc48d9c-glntz
+97s         Normal    Started                 pod/auction-74cfc48d9c-glntz          Container started
+97s         Normal    Created                 pod/auction-74cfc48d9c-glntz          Container created
+97s         Normal    Pulled                  pod/auction-74cfc48d9c-glntz          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+97s         Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-k85x9
+97s         Normal    Killing                 pod/auction-5846964cdd-k85x9          Stopping container app
+97s         Warning   Unhealthy               pod/auction-5846964cdd-k85x9          Readiness probe failed: Get "http://10.244.0.21:8000/health/db": dial tcp 10.244.0.21:8000: connect: connection refused
+94s         Normal    Created                 pod/auction-74cfc48d9c-glntz          Container created
+94s         Normal    Started                 pod/auction-74cfc48d9c-glntz          Container started
+94s         Normal    Pulled                  pod/auction-74cfc48d9c-glntz          Container image "galactic-auction:1.1.0" already present on machine and can be accessed by the pod
+93s         Warning   Unhealthy               pod/auction-74cfc48d9c-glntz          Startup probe failed: Get "http://10.244.0.24:8000/health": dial tcp 10.244.0.24:8000: connect: connection refused
+86s         Normal    Killing                 pod/auction-5846964cdd-lvssc          Stopping container app
+86s         Normal    Scheduled               pod/auction-5846964cdd-xrjgr          Successfully assigned galactic-auction/auction-5846964cdd-xrjgr to galactic-auction
+59s         Normal    SuccessfulCreate        replicaset/auction-5846964cdd         (combined from similar events): Created pod: auction-5846964cdd-bhs44
+86s         Normal    SuccessfulDelete        replicaset/auction-5846964cdd         Deleted pod: auction-5846964cdd-lvssc
+85s         Normal    Pulled                  pod/auction-5846964cdd-xrjgr          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+85s         Normal    Started                 pod/auction-5846964cdd-xrjgr          Container started
+85s         Normal    Created                 pod/auction-5846964cdd-xrjgr          Container created
+82s         Normal    Pulled                  pod/auction-5846964cdd-xrjgr          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+82s         Normal    Started                 pod/auction-5846964cdd-xrjgr          Container started
+82s         Normal    Created                 pod/auction-5846964cdd-xrjgr          Container created
+79s         Warning   Unhealthy               pod/auction-5846964cdd-xrjgr          Startup probe failed: Get "http://10.244.0.25:8000/health": dial tcp 10.244.0.25:8000: connect: connection refused
+72s         Warning   Unhealthy               pod/auction-74cfc48d9c-lf8nq          Readiness probe failed: Get "http://10.244.0.23:8000/health/db": dial tcp 10.244.0.23:8000: connect: connection refused
+72s         Normal    SuccessfulDelete        replicaset/auction-74cfc48d9c         Deleted pod: auction-74cfc48d9c-lf8nq
+72s         Normal    Scheduled               pod/auction-5846964cdd-bqd24          Successfully assigned galactic-auction/auction-5846964cdd-bqd24 to galactic-auction
+72s         Normal    Pulled                  pod/auction-5846964cdd-bqd24          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+72s         Normal    Killing                 pod/auction-74cfc48d9c-lf8nq          Stopping container app
+71s         Normal    Created                 pod/auction-5846964cdd-bqd24          Container created
+71s         Normal    Started                 pod/auction-5846964cdd-bqd24          Container started
+68s         Normal    Pulled                  pod/auction-5846964cdd-bqd24          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+68s         Normal    Started                 pod/auction-5846964cdd-bqd24          Container started
+66s         Warning   Unhealthy               pod/auction-5846964cdd-bqd24          Startup probe failed: Get "http://10.244.0.26:8000/health": dial tcp 10.244.0.26:8000: connect: connection refused
+68s         Normal    Created                 pod/auction-5846964cdd-bqd24          Container created
+59s         Normal    Created                 pod/auction-5846964cdd-bhs44          Container created
+59s         Normal    SuccessfulDelete        replicaset/auction-74cfc48d9c         Deleted pod: auction-74cfc48d9c-glntz
+59s         Normal    Started                 pod/auction-5846964cdd-bhs44          Container started
+59s         Normal    Killing                 pod/auction-74cfc48d9c-glntz          Stopping container app
+59s         Normal    Scheduled               pod/auction-5846964cdd-bhs44          Successfully assigned galactic-auction/auction-5846964cdd-bhs44 to galactic-auction
+59s         Normal    Pulled                  pod/auction-5846964cdd-bhs44          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+56s         Normal    Started                 pod/auction-5846964cdd-bhs44          Container started
+56s         Normal    Created                 pod/auction-5846964cdd-bhs44          Container created
+56s         Normal    Pulled                  pod/auction-5846964cdd-bhs44          Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+55s         Warning   Unhealthy               pod/auction-5846964cdd-bhs44          Startup probe failed: Get "http://10.244.0.27:8000/health": dial tcp 10.244.0.27:8000: connect: connection refused
+48s         Normal    SuccessfulCreate        replicaset/auction-557565dd7          Created pod: auction-557565dd7-zvptv
+48s         Normal    Scheduled               pod/auction-557565dd7-zvptv           Successfully assigned galactic-auction/auction-557565dd7-zvptv to galactic-auction
+48s         Normal    SuccessfulDelete        replicaset/auction-74cfc48d9c         Deleted pod: auction-74cfc48d9c-xdq64
+48s         Normal    Killing                 pod/auction-74cfc48d9c-xdq64          Stopping container app
+47s         Normal    Started                 pod/auction-557565dd7-zvptv           Container started
+47s         Normal    Created                 pod/auction-557565dd7-zvptv           Container created
+47s         Normal    Pulled                  pod/auction-557565dd7-zvptv           Container image "galactic-auction:1.0.0" already present on machine and can be accessed by the pod
+45s         Warning   Unhealthy               pod/auction-74cfc48d9c-xdq64          Readiness probe failed: Get "http://10.244.0.22:8000/health/db": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+2s          Normal    Pulling                 pod/auction-557565dd7-zvptv           Pulling image "galactic-auction:does-not-exist-lab3"
+1s          Warning   Failed                  pod/auction-557565dd7-zvptv           Failed to pull image "galactic-auction:does-not-exist-lab3": failed to pull and unpack image "docker.io/library/galactic-auction:does-not-exist-lab3": failed to resolve reference "docker.io/library/galactic-auction:does-not-exist-lab3": pull access denied, repository does not exist or may require authorization: server message: insufficient_scope: authorization failed
+1s          Warning   Failed                  pod/auction-557565dd7-zvptv           Error: ErrImagePull
+15s         Normal    BackOff                 pod/auction-557565dd7-zvptv           Back-off pulling image "galactic-auction:does-not-exist-lab3"
+15s         Warning   Failed                  pod/auction-557565dd7-zvptv           Error: ImagePullBackOff
+INFO:     10.244.0.10:37246 - "GET /lab/info HTTP/1.1" 200 OK
+INFO:     10.244.0.10:37262 - "GET /lab/info HTTP/1.1" 200 OK
+INFO:     10.244.0.10:37296 - "GET /lab/info HTTP/1.1" 200 OK
+INFO:     10.244.0.1:49584 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:49592 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:49598 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:49614 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:39458 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:39470 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:39474 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:39476 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:56996 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:57006 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:57010 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:57018 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:57034 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:59944 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:59950 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:59954 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:59956 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:36096 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:36110 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:36114 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:36128 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:52784 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:52798 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:52806 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:52818 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.244.0.1:52820 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     10.244.0.1:36406 - "GET /health/db HTTP/1.1" 200 OK
+uid=1000(appuser) gid=1000(appuser) groups=1000(appuser)
+auction-5846964cdd-xrjgr
+/code
+deployment.apps/auction image updated
+deployment "auction" successfully rolled out
+deployment.apps/auction scaled
+deployment "auction" successfully rolled out
+NAME                            READY   STATUS        RESTARTS   AGE
+pod/auction-557565dd7-zvptv     0/1     Terminating   0          49s
+pod/auction-5846964cdd-bhs44    1/1     Running       0          60s
+pod/auction-5846964cdd-bqd24    1/1     Terminating   0          73s
+pod/auction-5846964cdd-xrjgr    1/1     Running       0          87s
+pod/auction-migrations-b899b    0/1     Completed     0          17m
+pod/postgres-58df78bf76-pzwg9   1/1     Running       0          17m
+pod/traffic-probe               1/1     Running       0          17m
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/auction    2/2     2            2           17m
+deployment.apps/postgres   1/1     1            1           17m
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/auction-557565dd7     0         0         0       6m29s
+replicaset.apps/auction-5846964cdd    2         2         2       17m
+replicaset.apps/auction-74cfc48d9c    0         0         0       7m30s
+replicaset.apps/postgres-58df78bf76   1         1         1       17m
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/auction    NodePort    10.107.28.181    <none>        80:30080/TCP   17m
+service/postgres   ClusterIP   10.106.136.121   <none>        5432/TCP       17m
+
+
+**********************
+PowerShell transcript end
+End time: 20261115230825
+**********************

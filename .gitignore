@@ -18,3 +18,4 @@ pgdata/
 .vs/
 loadtests/results/*.csv
 .venv-load/
+.lab-cache/

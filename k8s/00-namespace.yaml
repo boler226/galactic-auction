@@ -1,0 +1,10 @@
+# DVO-L3-7F2A91
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: galactic-auction
+  labels:
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: кабачок

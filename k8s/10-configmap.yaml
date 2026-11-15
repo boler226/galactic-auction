@@ -1,0 +1,20 @@
+# DVO-L3-7F2A91
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auction-config
+  namespace: galactic-auction
+  labels:
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+data:
+  APP_ENV: sandbox
+  APP_NAME: Galactic Auction - Kubernetes Lab
+  DEBUG: "false"
+  POSTGRES_HOST: postgres
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: galactic_auction_lab
+  POSTGRES_USER: lab_user
+  DB_POOL_SIZE: "5"
+  DB_MAX_OVERFLOW: "5"
