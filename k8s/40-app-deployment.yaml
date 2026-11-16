@@ -1,0 +1,68 @@
+# DVO-L3-7F2A91
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction
+  namespace: galactic-auction
+  labels:
+    app: auction
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  minReadySeconds: 5
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: auction
+  template:
+    metadata:
+      labels:
+        app: auction
+        mascot: kabachok
+      annotations:
+        devops-lab/mascot-approved: "true"
+    spec:
+      initContainers:
+        - name: wait-schema
+          image: galactic-auction:1.0.0
+          imagePullPolicy: IfNotPresent
+          command: [python, -m, lab_runtime.wait_database, --schema]
+          envFrom:
+            - configMapRef: {name: auction-config}
+            - secretRef: {name: auction-secret}
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+      containers:
+        - name: app
+          image: galactic-auction:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - configMapRef: {name: auction-config}
+            - secretRef: {name: auction-secret}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet: {path: /health/db, port: http}
+            periodSeconds: 3
+            timeoutSeconds: 2

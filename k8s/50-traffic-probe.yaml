@@ -1,0 +1,20 @@
+# DVO-L3-7F2A91
+apiVersion: v1
+kind: Pod
+metadata:
+  name: traffic-probe
+  namespace: galactic-auction
+  labels:
+    app: traffic-probe
+    mascot: kabachok
+  annotations:
+    devops-lab/mascot-approved: "true"
+spec:
+  containers:
+    - name: probe
+      image: galactic-auction:1.0.0
+      imagePullPolicy: IfNotPresent
+      command: [python, -c, 'import time; time.sleep(2147483647)']
+      resources:
+        requests: {cpu: 10m, memory: 32Mi}
+        limits: {cpu: 100m, memory: 64Mi}
