@@ -1,0 +1,24 @@
+# DVO-L4-3C8B52
+LAST SEEN   TYPE     REASON             OBJECT                                     MESSAGE
+3m57s       Normal   SuccessfulCreate   job/auction-galactic-auction-migrate-1     Created pod: auction-galactic-auction-migrate-1-jrs2w
+3m40s       Normal   Completed          job/auction-galactic-auction-migrate-1     Job completed
+3m35s       Normal   SuccessfulCreate   job/auction-galactic-auction-test          Created pod: auction-galactic-auction-test-6gjpd
+3m28s       Normal   Completed          job/auction-galactic-auction-test          Job completed
+3m27s       Normal   SuccessfulCreate   job/auction-galactic-auction-pre-upgrade   Created pod: auction-galactic-auction-pre-upgrade-2fcqw
+3m18s       Normal   SuccessfulCreate   job/auction-galactic-auction-migrate-2     Created pod: auction-galactic-auction-migrate-2-tlndc
+3m18s       Normal   Completed          job/auction-galactic-auction-pre-upgrade   Job completed
+3m11s       Normal   Completed          job/auction-galactic-auction-migrate-2     Job completed
+2m55s       Normal   SuccessfulCreate   job/auction-galactic-auction-pre-upgrade   Created pod: auction-galactic-auction-pre-upgrade-h878s
+2m48s       Normal   SuccessfulCreate   job/auction-galactic-auction-migrate-3     Created pod: auction-galactic-auction-migrate-3-wmfzz
+2m48s       Normal   Completed          job/auction-galactic-auction-pre-upgrade   Job completed
+2m34s       Normal   Completed          job/auction-galactic-auction-migrate-3     Job completed
+2m9s        Normal   SuccessfulCreate   job/auction-galactic-auction-test          Created pod: auction-galactic-auction-test-6tr9p
+2m2s        Normal   Completed          job/auction-galactic-auction-test          Job completed
+2m1s        Normal   SuccessfulCreate   job/auction-galactic-auction-migrate-1     Created pod: auction-galactic-auction-migrate-1-6jlcx
+110s        Normal   Completed          job/auction-galactic-auction-migrate-1     Job completed
+95s         Normal   SuccessfulCreate   job/auction-galactic-auction-test          Created pod: auction-galactic-auction-test-7zsv8
+87s         Normal   Completed          job/auction-galactic-auction-test          Job completed
+86s         Normal   SuccessfulCreate   job/second-galactic-auction-migrate-1      Created pod: second-galactic-auction-migrate-1-7tnd5
+74s         Normal   Completed          job/second-galactic-auction-migrate-1      Job completed
+70s         Normal   SuccessfulCreate   job/second-galactic-auction-test           Created pod: second-galactic-auction-test-ms5gf
+63s         Normal   Completed          job/second-galactic-auction-test           Job completed

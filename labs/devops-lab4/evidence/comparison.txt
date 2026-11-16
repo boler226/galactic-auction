@@ -1,0 +1,10 @@
+# DVO-L4-3C8B52
+Offline comparison (helm template, no installation):
+dev: replicas=2, image=galactic-auction:1.0.0, resources={'limits': {'cpu': '500m', 'memory': '256Mi'}, 'requests': {'cpu': '100m', 'memory': '128Mi'}}
+dev kinds: {'Secret': 1, 'ConfigMap': 1, 'PersistentVolumeClaim': 1, 'Service': 2, 'Pod': 1, 'Deployment': 2, 'Job': 3}
+dev normal resources: {'Secret': 1, 'ConfigMap': 1, 'PersistentVolumeClaim': 1, 'Service': 2, 'Pod': 1, 'Deployment': 2, 'Job': 1}
+prod: replicas=3, image=galactic-auction:1.1.0, resources={'limits': {'cpu': '1', 'memory': '384Mi'}, 'requests': {'cpu': '150m', 'memory': '192Mi'}}
+prod kinds: {'Secret': 1, 'ConfigMap': 1, 'PersistentVolumeClaim': 1, 'Service': 2, 'Pod': 1, 'Deployment': 2, 'Job': 3, 'Ingress': 1}
+prod normal resources: {'Secret': 1, 'ConfigMap': 1, 'PersistentVolumeClaim': 1, 'Service': 2, 'Pod': 1, 'Deployment': 2, 'Job': 1, 'Ingress': 1}
+Lab3 kinds: {'Namespace': 1, 'ConfigMap': 1, 'Secret': 1, 'PersistentVolumeClaim': 1, 'Service': 2, 'Deployment': 2, 'Job': 1, 'Pod': 1}
+Namespace is managed by --create-namespace; its template is optional. Other nine normal resources match lab3. Prod adds Ingress; two Jobs are Helm hooks.

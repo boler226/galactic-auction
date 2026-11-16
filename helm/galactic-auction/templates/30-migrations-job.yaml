@@ -1,0 +1,32 @@
+# DVO-L4-3C8B52
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "auction.fullname" . }}-migrate-{{ .Release.Revision }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "auction.labels" . | nindent 4 }}
+  annotations:
+    {{- include "auction.annotations" . | nindent 4 }}
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: auction-migrations
+        {{- include "auction.labels" . | nindent 8 }}
+      annotations:
+        {{- include "auction.annotations" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrations
+          image: {{ include "auction.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [sh, -c, 'python -m lab_runtime.wait_database && alembic upgrade head']
+          envFrom:
+            - configMapRef: {name: '{{ include "auction.fullname" . }}-config'}
+            - secretRef: {name: '{{ include "auction.fullname" . }}-secret'}
+          resources:
+            {{- toYaml .Values.migrationResources | nindent 12 }}

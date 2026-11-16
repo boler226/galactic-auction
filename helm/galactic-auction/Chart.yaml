@@ -1,0 +1,7 @@
+# DVO-L4-3C8B52
+apiVersion: v2
+name: galactic-auction
+description: Galactic Auction FastAPI and PostgreSQL for DevOps lab 4
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

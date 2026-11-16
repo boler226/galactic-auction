@@ -1,0 +1,299 @@
+# DVO-L4-3C8B52
+**********************
+PowerShell transcript start
+Start time: 20261116214433
+Username: DESKTOP-AKE41CN\User
+RunAs User: DESKTOP-AKE41CN\User
+Configuration Name:
+Machine: DESKTOP-AKE41CN (Microsoft Windows NT 10.0.22631.0)
+Host Application: C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+& ./labs/devops-lab4/run.ps1 -RemoveLab3
+Process ID: 10200
+PSVersion: 7.6.9
+PSEdition: Core
+GitCommitId: 7.6.9
+OS: Microsoft Windows 10.0.22631
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is D:\Users\User\PycharmProjects\galactic-auction\labs\devops-lab4\evidence/lifecycle.txt
+v3.17.3+ge4da497
+NAME                        READY   STATUS      RESTARTS      AGE
+auction-5846964cdd-dwtk8    1/1     Running     0             30m
+auction-5846964cdd-h9gtl    1/1     Running     0             31m
+auction-migrations-b899b    0/1     Completed   0             22h
+postgres-58df78bf76-pzwg9   1/1     Running     1 (41m ago)   22h
+traffic-probe               1/1     Running     1 (41m ago)   22h
+{"status":"ok","database":"up"}
+namespace "galactic-auction" deleted
+configmap "auction-config" deleted from galactic-auction namespace
+secret "auction-secret" deleted from galactic-auction namespace
+persistentvolumeclaim "postgres-data" deleted from galactic-auction namespace
+service "postgres" deleted from galactic-auction namespace
+deployment.apps "postgres" deleted from galactic-auction namespace
+job.batch "auction-migrations" deleted from galactic-auction namespace
+deployment.apps "auction" deleted from galactic-auction namespace
+service "auction" deleted from galactic-auction namespace
+pod "traffic-probe" deleted from galactic-auction namespace
+==> Linting D:\Users\User\PycharmProjects\galactic-auction\helm\galactic-auction
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+==> Linting D:\Users\User\PycharmProjects\galactic-auction\helm\galactic-auction
+[INFO] Chart.yaml: icon is recommended
+
+1 chart(s) linted, 0 chart(s) failed
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:45:21 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 1
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+NAME   	NAMESPACE            	REVISION	UPDATED                              	STATUS  	CHART                 	APP VERSION
+auction	galactic-auction-helm	1       	2026-11-16 21:45:21.2349301 +0200 EET	deployed	galactic-auction-0.1.0	1.0.0
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:45:21 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 1
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+COMPUTED VALUES:
+config:
+  APP_ENV: sandbox
+  APP_NAME: Galactic Auction Helm Dev
+  DB_MAX_OVERFLOW: "5"
+  DB_POOL_SIZE: "5"
+  DEBUG: "false"
+  POSTGRES_DB: galactic_auction_lab
+  POSTGRES_USER: lab_user
+containerPort: 8000
+hooks:
+  enabled: true
+image:
+  pullPolicy: IfNotPresent
+  repository: galactic-auction
+  tag: 1.0.0
+ingress:
+  className: nginx
+  enabled: false
+  host: auction.local
+initResources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+migrationResources:
+  limits:
+    cpu: "1"
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+namespace:
+  create: false
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+postgres:
+  image: postgres:16-alpine
+  port: 5432
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+probeResources:
+  limits:
+    cpu: 100m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 32Mi
+replicaCount: 2
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+secrets:
+  DEMO_PASSWORD: LabDemo12345!
+  POSTGRES_PASSWORD: lab-only-postgres-password
+  SECRET_KEY: lab-only-jwt-key-not-for-real-systems-123456789
+service:
+  nodePort: null
+  port: 80
+  type: NodePort
+test:
+  enabled: true
+NAME                            TYPE                 DATA   AGE
+sh.helm.release.v1.auction.v1   helm.sh/release.v1   1      23s
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:45:21 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     auction-galactic-auction-test
+Last Started:   Mon Nov 16 21:45:44 2026
+Last Completed: Mon Nov 16 21:45:51 2026
+Phase:          Succeeded
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+Release "auction" has been upgraded. Happy Helming!
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:45:52 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 2
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+Release "auction" has been upgraded. Happy Helming!
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:46:23 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 3
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+Ingress host: http://auction.local (requires ingress networking/DNS).
+NAME                                                     READY   STATUS      RESTARTS      AGE
+pod/auction-galactic-auction-app-5988795df-d24qv         1/1     Running     0             69s
+pod/auction-galactic-auction-app-744785b569-bbm5w        1/1     Running     0             39s
+pod/auction-galactic-auction-app-744785b569-lkgds        1/1     Running     0             19s
+pod/auction-galactic-auction-app-744785b569-r7ffp        1/1     Running     0             8s
+pod/auction-galactic-auction-migrate-3-wmfzz             0/1     Completed   0             39s
+pod/auction-galactic-auction-postgres-6659578856-vcx7t   1/1     Running     0             108s
+pod/auction-galactic-auction-probe                       1/1     Running     1 (39s ago)   108s
+
+NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/auction-galactic-auction-app        4/3     3            3           108s
+deployment.apps/auction-galactic-auction-postgres   1/1     1            1           108s
+
+NAME                                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/auction-galactic-auction-app        ClusterIP   10.110.110.223   <none>        80/TCP     109s
+service/auction-galactic-auction-postgres   ClusterIP   10.110.174.13    <none>        5432/TCP   109s
+
+NAME                                                 CLASS   HOSTS           ADDRESS        PORTS   AGE
+ingress.networking.k8s.io/auction-galactic-auction   nginx   auction.local   192.168.49.2   80      39s
+
+NAME                                                  STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/auction-galactic-auction-data   Bound    pvc-9de25f92-db3a-44be-976f-c17c98ec99a4   1Gi        RWO            standard       <unset>                 109s
+
+NAME                                           STATUS     COMPLETIONS   DURATION   AGE
+job.batch/auction-galactic-auction-migrate-3   Complete   1/1           14s        39s
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:46:23 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 3
+TEST SUITE:     auction-galactic-auction-test
+Last Started:   Mon Nov 16 21:47:10 2026
+Last Completed: Mon Nov 16 21:47:17 2026
+Phase:          Succeeded
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+Ingress host: http://auction.local (requires ingress networking/DNS).
+REVISION	UPDATED                 	STATUS    	CHART                 	APP VERSION	DESCRIPTION
+1       	Mon Nov 16 21:45:21 2026	superseded	galactic-auction-0.1.0	1.0.0      	Install complete
+2       	Mon Nov 16 21:45:52 2026	superseded	galactic-auction-0.1.0	1.0.0      	Upgrade complete
+3       	Mon Nov 16 21:46:23 2026	deployed  	galactic-auction-0.1.0	1.0.0      	Upgrade complete
+Rollback was a success! Happy Helming!
+REVISION	UPDATED                 	STATUS    	CHART                 	APP VERSION	DESCRIPTION
+1       	Mon Nov 16 21:45:21 2026	superseded	galactic-auction-0.1.0	1.0.0      	Install complete
+2       	Mon Nov 16 21:45:52 2026	superseded	galactic-auction-0.1.0	1.0.0      	Upgrade complete
+3       	Mon Nov 16 21:46:23 2026	superseded	galactic-auction-0.1.0	1.0.0      	Upgrade complete
+4       	Mon Nov 16 21:47:18 2026	deployed  	galactic-auction-0.1.0	1.0.0      	Rollback to 1
+NAME: auction
+LAST DEPLOYED: Mon Nov 16 21:47:18 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 4
+TEST SUITE:     auction-galactic-auction-test
+Last Started:   Mon Nov 16 21:47:44 2026
+Last Completed: Mon Nov 16 21:47:52 2026
+Phase:          Succeeded
+NOTES:
+# DVO-L4-3C8B52
+Release auction is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/auction-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+NAME: second
+LAST DEPLOYED: Mon Nov 16 21:47:52 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 1
+NOTES:
+# DVO-L4-3C8B52
+Release second is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/second-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+NAME   	NAMESPACE            	REVISION	UPDATED                              	STATUS  	CHART                 	APP VERSION
+auction	galactic-auction-helm	4       	2026-11-16 21:47:18.0566785 +0200 EET	deployed	galactic-auction-0.1.0	1.0.0
+second 	galactic-auction-helm	1       	2026-11-16 21:47:52.6348594 +0200 EET	deployed	galactic-auction-0.1.0	1.0.0
+NAME: second
+LAST DEPLOYED: Mon Nov 16 21:47:52 2026
+NAMESPACE: galactic-auction-helm
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     second-galactic-auction-test
+Last Started:   Mon Nov 16 21:48:09 2026
+Last Completed: Mon Nov 16 21:48:16 2026
+Phase:          Succeeded
+NOTES:
+# DVO-L4-3C8B52
+Release second is installed in galactic-auction-helm.
+Open a terminal and keep it running:
+  kubectl --context galactic-auction -n galactic-auction-helm port-forward service/second-galactic-auction-app 8080:80
+Open http://127.0.0.1:8080
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+auction-galactic-auction-app        NodePort    10.110.110.223   <none>        80:30413/TCP   2m55s
+auction-galactic-auction-postgres   ClusterIP   10.110.174.13    <none>        5432/TCP       2m55s
+second-galactic-auction-app         NodePort    10.97.219.47     <none>        80:31281/TCP   23s
+second-galactic-auction-postgres    ClusterIP   10.97.67.244     <none>        5432/TCP       23s
+release "second" uninstalled
+release "auction" uninstalled
+NAME	NAMESPACE	REVISION	UPDATED	STATUS	CHART	APP VERSION
+NAME                         DATA   AGE
+configmap/kube-root-ca.crt   1      4m1s
+**********************
+PowerShell transcript end
+End time: 20261116214922
+**********************

@@ -1,0 +1,15 @@
+# DVO-L4-3C8B52
+replicaCount: 3
+image:
+  tag: "1.1.0"
+resources:
+  requests: {cpu: 150m, memory: 192Mi}
+  limits: {cpu: "1", memory: 384Mi}
+config:
+  APP_ENV: production
+  APP_NAME: Galactic Auction Helm Prod
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  host: auction.local

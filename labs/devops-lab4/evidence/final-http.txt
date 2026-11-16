@@ -1,0 +1,12 @@
+# DVO-L4-3C8B52
+Final dev installation after lifecycle demonstration:
+/ HTTP 200
+/docs HTTP 200
+/health/db HTTP 200
+{"status":"ok","database":"up"}
+/lab/info HTTP 200
+{"version":"1.0.0","pod":"auction-galactic-auction-app-58f6499b97-5pftd"}
+Login verified: admin, role=admin
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
+auction-galactic-auction-app        2/2     2            2           4m53s
+auction-galactic-auction-postgres   1/1     1            1           4m53s

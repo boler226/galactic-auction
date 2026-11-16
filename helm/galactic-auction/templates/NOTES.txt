@@ -1,0 +1,6 @@
+# DVO-L4-3C8B52
+Release {{ .Release.Name }} is installed in {{ .Release.Namespace }}.
+Open a terminal and keep it running:
+  kubectl --context {{ .Values.kubeContext | default "galactic-auction" }} -n {{ .Release.Namespace }} port-forward service/{{ include "auction.fullname" . }}-app 8080:{{ .Values.service.port }}
+Open http://127.0.0.1:8080
+{{ if .Values.ingress.enabled }}Ingress host: http://{{ .Values.ingress.host }} (requires ingress networking/DNS).{{ end }}

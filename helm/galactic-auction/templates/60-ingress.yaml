@@ -1,0 +1,24 @@
+# DVO-L4-3C8B52
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "auction.fullname" . }}
+  labels:
+    {{- include "auction.labels" . | nindent 4 }}
+  annotations:
+    {{- include "auction.annotations" . | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "auction.fullname" . }}-app
+                port:
+                  number: {{ .Values.service.port }}
+{{- end }}

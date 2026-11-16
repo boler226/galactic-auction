@@ -1,0 +1,70 @@
+# DVO-L4-3C8B52
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "auction.fullname" . }}-app
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: auction
+    {{- include "auction.labels" . | nindent 4 }}
+  annotations:
+    {{- include "auction.annotations" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 10
+  minReadySeconds: 5
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: auction
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: auction
+        {{- include "auction.labels" . | nindent 8 }}
+      annotations:
+        {{- include "auction.annotations" . | nindent 8 }}
+        checksum/config: {{ include (print $.Template.BasePath "/10-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/11-secret.yaml") . | sha256sum }}
+    spec:
+      initContainers:
+        - name: wait-schema
+          image: {{ include "auction.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [python, -m, lab_runtime.wait_database, --schema]
+          envFrom:
+            - configMapRef: {name: '{{ include "auction.fullname" . }}-config'}
+            - secretRef: {name: '{{ include "auction.fullname" . }}-secret'}
+          resources:
+            {{- toYaml .Values.initResources | nindent 12 }}
+      containers:
+        - name: app
+          command: [uvicorn, lab_runtime.main:app, --host, "0.0.0.0", --port, {{ .Values.containerPort | quote }}]
+          image: {{ include "auction.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          envFrom:
+            - configMapRef: {name: '{{ include "auction.fullname" . }}-config'}
+            - secretRef: {name: '{{ include "auction.fullname" . }}-secret'}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet: {path: /health/db, port: http}
+            periodSeconds: 3
+            timeoutSeconds: 2

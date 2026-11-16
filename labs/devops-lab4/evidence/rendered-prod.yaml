@@ -1,0 +1,508 @@
+# DVO-L4-3C8B52
+---
+# Source: galactic-auction/templates/11-secret.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auction-galactic-auction-secret
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+type: Opaque
+stringData:
+  DEMO_PASSWORD: "LabDemo12345!"
+  POSTGRES_PASSWORD: "lab-only-postgres-password"
+  SECRET_KEY: "lab-only-jwt-key-not-for-real-systems-123456789"
+---
+# Source: galactic-auction/templates/10-configmap.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auction-galactic-auction-config
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+data:
+  POSTGRES_HOST: "auction-galactic-auction-postgres"
+  POSTGRES_PORT: "5432"
+  APP_ENV: "production"
+  APP_NAME: "Galactic Auction Helm Prod"
+  DB_MAX_OVERFLOW: "5"
+  DB_POOL_SIZE: "5"
+  DEBUG: "false"
+  POSTGRES_DB: "galactic_auction_lab"
+  POSTGRES_USER: "lab_user"
+---
+# Source: galactic-auction/templates/20-postgres-pvc.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auction-galactic-auction-data
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Source: galactic-auction/templates/21-postgres-service.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-galactic-auction-postgres
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+    app.kubernetes.io/instance: auction
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# Source: galactic-auction/templates/41-app-service.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-galactic-auction-app
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  type: ClusterIP
+  selector:
+    app: auction
+    app.kubernetes.io/instance: auction
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+# Source: galactic-auction/templates/50-traffic-probe.yaml
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: Pod
+metadata:
+  name: auction-galactic-auction-probe
+  namespace: galactic-auction-helm
+  labels:
+    app: traffic-probe
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  containers:
+    - name: probe
+      image: "galactic-auction:1.1.0"
+      imagePullPolicy: IfNotPresent
+      command: [python, -c, 'import time; time.sleep(2147483647)']
+      resources:
+        limits:
+          cpu: 100m
+          memory: 64Mi
+        requests:
+          cpu: 10m
+          memory: 32Mi
+---
+# Source: galactic-auction/templates/22-postgres-deployment.yaml
+# DVO-L4-3C8B52
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-galactic-auction-postgres
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: postgres
+      app.kubernetes.io/instance: auction
+  template:
+    metadata:
+      labels:
+        app: postgres
+        app.kubernetes.io/name: galactic-auction
+        app.kubernetes.io/instance: auction
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: "galactic-auction-0.1.0"
+        mascot: harbuz
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot: гарбуз
+    spec:
+      containers:
+        - name: auction-galactic-auction-postgres
+          args: ["-p", "5432"]
+          image: "postgres:16-alpine"
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef: {name: 'auction-galactic-auction-config', key: POSTGRES_USER}
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef: {name: 'auction-galactic-auction-config', key: POSTGRES_DB}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: {name: 'auction-galactic-auction-secret', key: POSTGRES_PASSWORD}
+          ports:
+            - containerPort: 5432
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          readinessProbe:
+            exec:
+              command: [sh, -c, 'pg_isready -p 5432 -U "$POSTGRES_USER" -d "$POSTGRES_DB"']
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: [sh, -c, 'pg_isready -p 5432 -U "$POSTGRES_USER" -d "$POSTGRES_DB"']
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: auction-galactic-auction-data
+---
+# Source: galactic-auction/templates/40-app-deployment.yaml
+# DVO-L4-3C8B52
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-galactic-auction-app
+  namespace: galactic-auction-helm
+  labels:
+    app: auction
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  minReadySeconds: 5
+  progressDeadlineSeconds: 300
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: auction
+      app.kubernetes.io/instance: auction
+  template:
+    metadata:
+      labels:
+        app: auction
+        app.kubernetes.io/name: galactic-auction
+        app.kubernetes.io/instance: auction
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: "galactic-auction-0.1.0"
+        mascot: harbuz
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot: гарбуз
+        checksum/config: 6afec1529f4e9ebed8d4059bc0ba5efb0da06bfe3a96b42c1dba3825ecab0dc7
+        checksum/secret: a3a615f1e18d30005bddcdf3db2e54c1957858c853ba3c0b488628645fb0aae3
+    spec:
+      initContainers:
+        - name: wait-schema
+          image: "galactic-auction:1.1.0"
+          imagePullPolicy: IfNotPresent
+          command: [python, -m, lab_runtime.wait_database, --schema]
+          envFrom:
+            - configMapRef: {name: 'auction-galactic-auction-config'}
+            - secretRef: {name: 'auction-galactic-auction-secret'}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+      containers:
+        - name: app
+          command: [uvicorn, lab_runtime.main:app, --host, "0.0.0.0", --port, "8000"]
+          image: "galactic-auction:1.1.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - configMapRef: {name: 'auction-galactic-auction-config'}
+            - secretRef: {name: 'auction-galactic-auction-secret'}
+          resources:
+            limits:
+              cpu: "1"
+              memory: 384Mi
+            requests:
+              cpu: 150m
+              memory: 192Mi
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 10
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet: {path: /health/db, port: http}
+            periodSeconds: 3
+            timeoutSeconds: 2
+---
+# Source: galactic-auction/templates/30-migrations-job.yaml
+# DVO-L4-3C8B52
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auction-galactic-auction-migrate-1
+  namespace: galactic-auction-helm
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: auction-migrations
+        app.kubernetes.io/name: galactic-auction
+        app.kubernetes.io/instance: auction
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: "galactic-auction-0.1.0"
+        mascot: harbuz
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot: гарбуз
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrations
+          image: "galactic-auction:1.1.0"
+          imagePullPolicy: IfNotPresent
+          command: [sh, -c, 'python -m lab_runtime.wait_database && alembic upgrade head']
+          envFrom:
+            - configMapRef: {name: 'auction-galactic-auction-config'}
+            - secretRef: {name: 'auction-galactic-auction-secret'}
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# Source: galactic-auction/templates/60-ingress.yaml
+# DVO-L4-3C8B52
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: auction-galactic-auction
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "auction.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auction-galactic-auction-app
+                port:
+                  number: 80
+---
+# Source: galactic-auction/templates/00-namespace.yaml
+# DVO-L4-3C8B52
+---
+# Source: galactic-auction/templates/70-pre-upgrade.yaml
+# DVO-L4-3C8B52
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auction-galactic-auction-pre-upgrade
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 90
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: galactic-auction
+        app.kubernetes.io/instance: auction
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: "galactic-auction-0.1.0"
+        mascot: harbuz
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot: гарбуз
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: check
+          image: "galactic-auction:1.1.0"
+          imagePullPolicy: IfNotPresent
+          command:
+            - python
+            - -c
+            - |
+              import urllib.request
+              url = "http://auction-galactic-auction-app:80/health/db"
+              print(urllib.request.urlopen(url, timeout=15).read().decode())
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+---
+# Source: galactic-auction/templates/80-test.yaml
+# DVO-L4-3C8B52
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: auction-galactic-auction-test
+  labels:
+    app.kubernetes.io/name: galactic-auction
+    app.kubernetes.io/instance: auction
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: "galactic-auction-0.1.0"
+    mascot: harbuz
+  annotations:
+    devops-lab/mascot-approved: "true"
+    devops-lab/mascot: гарбуз
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 90
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: galactic-auction
+        app.kubernetes.io/instance: auction
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: "galactic-auction-0.1.0"
+        mascot: harbuz
+      annotations:
+        devops-lab/mascot-approved: "true"
+        devops-lab/mascot: гарбуз
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: check
+          image: "galactic-auction:1.1.0"
+          imagePullPolicy: IfNotPresent
+          command:
+            - python
+            - -c
+            - |
+              import urllib.request
+              url = "http://auction-galactic-auction-app:80/health/db"
+              print(urllib.request.urlopen(url, timeout=15).read().decode())
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi

@@ -1,0 +1,57 @@
+# DVO-L4-3C8B52
+image:
+  repository: galactic-auction
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+replicaCount: 2
+namespace:
+  create: false
+service:
+  type: NodePort
+  port: 80
+  nodePort: null
+containerPort: 8000
+resources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: 500m, memory: 256Mi}
+initResources:
+  requests: {cpu: 50m, memory: 64Mi}
+  limits: {cpu: 500m, memory: 256Mi}
+migrationResources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: "1", memory: 256Mi}
+probeResources:
+  requests: {cpu: 10m, memory: 32Mi}
+  limits: {cpu: 100m, memory: 64Mi}
+config:
+  APP_ENV: sandbox
+  APP_NAME: Galactic Auction Helm Dev
+  DEBUG: "false"
+  POSTGRES_DB: galactic_auction_lab
+  POSTGRES_USER: lab_user
+  DB_POOL_SIZE: "5"
+  DB_MAX_OVERFLOW: "5"
+# Public training values, never use in real systems.
+secrets:
+  POSTGRES_PASSWORD: lab-only-postgres-password
+  SECRET_KEY: lab-only-jwt-key-not-for-real-systems-123456789
+  DEMO_PASSWORD: LabDemo12345!
+postgres:
+  image: postgres:16-alpine
+  port: 5432
+  replicaCount: 1
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {cpu: "1", memory: 512Mi}
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+ingress:
+  enabled: false
+  className: nginx
+  host: auction.local
+hooks:
+  enabled: true
+test:
+  enabled: true
