@@ -1,4 +1,3 @@
-# DVO-L4-3C8B52
 # Galactic Auction — Helm, лабораторна №4
 
 Чарт пакує той самий FastAPI + PostgreSQL із лабораторної №3.
