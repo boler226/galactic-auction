@@ -1,0 +1,9 @@
+# DVO-L4-3C8B52
+replicaCount: 2
+image:
+  tag: "1.0.0"
+resources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: 500m, memory: 256Mi}
+ingress:
+  enabled: false

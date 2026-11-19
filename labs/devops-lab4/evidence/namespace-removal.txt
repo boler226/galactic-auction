@@ -1,0 +1,3 @@
+# DVO-L4-3C8B52
+namespace "galactic-auction-helm" deleted
+Namespace lookup after deletion: ''

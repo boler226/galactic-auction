@@ -1,0 +1,19 @@
+# DVO-L4-3C8B52
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "auction.fullname" . }}-probe
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: traffic-probe
+    {{- include "auction.labels" . | nindent 4 }}
+  annotations:
+    {{- include "auction.annotations" . | nindent 4 }}
+spec:
+  containers:
+    - name: probe
+      image: {{ include "auction.image" . | quote }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      command: [python, -c, 'import time; time.sleep(2147483647)']
+      resources:
+        {{- toYaml .Values.probeResources | nindent 8 }}

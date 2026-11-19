@@ -4,6 +4,8 @@ repos:
     hooks:
       - id: check-ast            # blocks commits with Python syntax errors
       - id: check-yaml
+        args: [--allow-multiple-documents]
+        exclude: ^helm/[^/]+/templates/
       - id: check-merge-conflict
       - id: check-added-large-files
       - id: trailing-whitespace

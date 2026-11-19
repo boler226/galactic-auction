@@ -1,0 +1,35 @@
+# DVO-L3-7F2A91
+**********************
+PowerShell transcript start
+Start time: 20261115230456
+Username: DESKTOP-AKE41CN\User
+RunAs User: DESKTOP-AKE41CN\User
+Configuration Name:
+Machine: DESKTOP-AKE41CN (Microsoft Windows NT 10.0.22631.0)
+Host Application: C:\Users\User\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll -Command try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}
+$ErrorActionPreference='Stop'; Start-Transcript -Path ./labs/devops-lab3/evidence/http-checks.txt; foreach($route in @('/','/docs','/health','/health/db','/lab/info')) { $reply=Invoke-WebRequest "http://127.0.0.1:8080$route"; Write-Output "$route HTTP $($reply.StatusCode)"; if($route -like '/health*' -or $route -eq '/lab/info'){ $reply.Content } }; $login=Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8080/auth/login -Body @{username='admin';password='LabDemo12345!'}; $me=Invoke-RestMethod http://127.0.0.1:8080/users/me -Headers @{Authorization="Bearer $($login.access_token)"}; Write-Output "Login verified: username=$($me.username), role=$($me.role)"; Stop-Transcript; & 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe' --headless --disable-gpu --no-first-run --no-default-browser-check --user-data-dir=D:\Users\User\PycharmProjects\galactic-auction\.lab-cache\edge-preview --window-size=1440,1000 --virtual-time-budget=5000 --screenshot=D:\Users\User\PycharmProjects\galactic-auction\labs\devops-lab3\evidence\site.png http://127.0.0.1:8080
+Process ID: 11532
+PSVersion: 7.6.9
+PSEdition: Core
+GitCommitId: 7.6.9
+OS: Microsoft Windows 10.0.22631
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.4
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is ./labs/devops-lab3/evidence/http-checks.txt
+/ HTTP 200
+/docs HTTP 200
+/health HTTP 200
+{"status":"ok"}
+/health/db HTTP 200
+{"status":"ok","database":"up"}
+/lab/info HTTP 200
+{"version":"1.0.0","pod":"auction-5846964cdd-bwsks"}
+Login verified: username=admin, role=admin
+**********************
+PowerShell transcript end
+End time: 20261115230457
+**********************

@@ -1,0 +1,12 @@
+# DVO-L3-7F2A91
+# Captured from the actual interactive PTY session, 2026-11-15.
+$ kubectl --context galactic-auction -n galactic-auction exec -it deployment/auction -c app -- sh
+$ id
+uid=1000(appuser) gid=1000(appuser) groups=1000(appuser)
+$ hostname
+auction-5846964cdd-bwsks
+$ printenv APP_VERSION
+1.0.0
+$ pwd
+/code
+$ exit

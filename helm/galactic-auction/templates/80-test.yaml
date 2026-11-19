@@ -1,0 +1,37 @@
+# DVO-L4-3C8B52
+{{- if .Values.test.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "auction.fullname" . }}-test
+  labels:
+    {{- include "auction.labels" . | nindent 4 }}
+  annotations:
+    {{- include "auction.annotations" . | nindent 4 }}
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 90
+  template:
+    metadata:
+      labels:
+        {{- include "auction.labels" . | nindent 8 }}
+      annotations:
+        {{- include "auction.annotations" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: check
+          image: {{ include "auction.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - python
+            - -c
+            - |
+              import urllib.request
+              url = "http://{{ include "auction.fullname" . }}-app:{{ .Values.service.port }}/health/db"
+              print(urllib.request.urlopen(url, timeout=15).read().decode())
+          resources:
+            {{- toYaml .Values.probeResources | nindent 12 }}
+{{- end }}

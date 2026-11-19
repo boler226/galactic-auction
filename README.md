@@ -1,5 +1,9 @@
 # Galactic Auction
 
+Лабораторна DevOps №3 (Kubernetes): [запуск, перевірка та демонстрація](labs/devops-lab3/README.md).
+
+Лабораторна DevOps №4 (Helm): [чарт та інструкція](helm/galactic-auction/README.md) · [звіт](labs/devops-lab4/REPORT.md).
+
 Високонавантажена система аукціону артефактів із конкурентними ставками
 через WebSocket у реальному часі. Курс: «Розробка високонавантажених
 систем на Python».
