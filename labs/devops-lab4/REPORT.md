@@ -1,18 +1,4 @@
-# DVO-L4-3C8B52
 # Лабораторна №4 — пакування Galactic Auction в Helm
-
-Виконано 16 листопада 2026 року. Гілка: `codex/devops-lab4-helm`.
-Середовище: Helm 3.17.3, локальний minikube profile galactic-auction,
-драйвер Docker, Kubernetes 1.37.0. Чарт: `helm/galactic-auction`, version
-0.1.0, appVersion 1.0.0. Обрано додаткове завдання **9b: hook і helm test**.
-
-## Підготовка
-
-Перевірено два робочі поди лабораторної №3 та відповідь
-`{"status":"ok","database":"up"}`. Старе розгортання було набором
-маніфестів, а не Helm-релізом, тому видалено через `kubectl delete -f k8s/`.
-Перед видаленням PVC створено дамп `.lab-cache/lab3-before-helm.sql` (не в Git).
-Helm завантажено з get.helm.sh, архів перевірено SHA256.
 
 ## Пункт 6 — два середовища без встановлення
 
